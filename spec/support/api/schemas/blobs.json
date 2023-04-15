@@ -1,0 +1,25 @@
+{
+    "$schema": "https://json-schema.org/draft-06/schema#",
+    "type": "object",
+    "properties": {
+        "document_id":{
+            "type":"string"
+        },
+        "document_filename":{
+            "type":"string"
+        },
+        "filename":{
+            "type":"string"
+        },
+        "file_size":{
+            "type":"string"
+        },
+        "file_format":{
+            "type":"string"
+        },
+        "file":{
+            "type":"string"
+        }
+    },
+    "required": ["document_id", "document_filename"]
+}
