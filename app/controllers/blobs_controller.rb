@@ -8,7 +8,7 @@ class BlobsController < ApplicationController
 
   # POST /blobs/create
   def create
-    json = BlobsSvc::Create.file(directory: 'received_files/', json: @json)
+    json = BlobsSvc::Create.file(json: @json)
 
     render json:, status: :created # http://www.railsstatuscodes.com/
   end
