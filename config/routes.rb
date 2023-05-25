@@ -6,5 +6,5 @@ Rails.application.routes.draw do
 
   post 'blobs/create', to: 'blobs#create'
 
-  resources :blobs, only: %i[index show]
+  resources :blobs, only: %i[index show destroy]
 end

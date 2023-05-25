@@ -4,12 +4,13 @@ module BlobsSvc
   # This service manages the blobs directories
   class Directory
     class << self
+      DIRECTORIES = [Constants::TARGET_DIRECTORY_ORIGINAL, Constants::TARGET_DIRECTORY_GCP]
+
       # list the files
       def list
         result = []
-        directories = [Constants::TARGET_DIRECTORY_ORIGINAL, Constants::TARGET_DIRECTORY_GCP]
 
-        directories.each do |directory|
+        DIRECTORIES.each do |directory|
           Dir.entries(directory).each do |file|
             file_name = File.join(directory, file)
             result << { file_name:, content_type: Constants::DEFAULT_CONTENT_TYPE } if File.file?(file_name)
@@ -17,6 +18,33 @@ module BlobsSvc
         end
 
         result
+      end
+
+      # get one file
+      def get_server_file(id:)
+        file_path = file_path_by(id:)
+
+        return '' unless file_path
+
+        file = JSON.parse(File.read(file_path))
+
+        {
+          file_name: file['filename'],
+          content: Base64.decode64(file['file'])
+        }
+      end
+
+      private
+
+      def file_path_by(id:)
+        DIRECTORIES.each do |directory|
+          Dir.entries(directory).each do |file|
+            file_name = File.join(directory, file)
+            return file_name if (File.file?(file_name)) && (/#{id}/.match file_name)
+          end
+        end
+
+        nil
       end
     end
   end
