@@ -23,8 +23,7 @@ module BlobsSvc
 
       @json
     rescue StandardError => e
-      require 'pry'; binding.pry # XXX: REMOVE THIS
-      puts 'File creation failed!'
+      puts "File creation failed! #{e.message}"
     ensure
       @json || {}
     end

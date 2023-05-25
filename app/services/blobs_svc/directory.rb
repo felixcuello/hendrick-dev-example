@@ -4,7 +4,7 @@ module BlobsSvc
   # This service manages the blobs directories
   class Directory
     class << self
-      DIRECTORIES = [Constants::TARGET_DIRECTORY_ORIGINAL, Constants::TARGET_DIRECTORY_GCP]
+      DIRECTORIES = [Constants::TARGET_DIRECTORY_ORIGINAL, Constants::TARGET_DIRECTORY_GCP].freeze
 
       # list the files
       def list
@@ -38,7 +38,7 @@ module BlobsSvc
         DIRECTORIES.each do |directory|
           Dir.entries(directory).each do |file|
             file_name = File.join(directory, file)
-            return file_name if (File.file?(file_name)) && (/#{id}/.match file_name)
+            return file_name if File.file?(file_name) && (/#{id}/.match file_name)
           end
         end
 

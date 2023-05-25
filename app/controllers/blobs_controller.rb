@@ -3,7 +3,7 @@
 # This is the blobs controller :-)
 class BlobsController < ApplicationController
   before_action :parse_json!, only: [:create]
-  before_action :get_file_id, only: [:show, :destroy]
+  before_action :file_id, only: %i[show destroy]
 
   # GET /blobs
   def index
@@ -39,10 +39,11 @@ class BlobsController < ApplicationController
   def parse_json!
     @json = params['blob'].as_json
   rescue StandardError
-    render json: {error: 'unprocessible_entry'}, status: :unprocessable_entity # http://www.railsstatuscodes.com/
+    render json: { error: 'unprocessible_entry' },
+           status: :unprocessable_entity # http://www.railsstatuscodes.com/
   end
 
-  def get_file_id
+  def file_id
     @id = params.fetch('id', 0).to_s
   end
 end

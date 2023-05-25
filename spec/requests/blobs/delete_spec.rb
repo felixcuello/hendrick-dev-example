@@ -7,6 +7,7 @@ RSpec.describe 'Blobs', type: :request do
 
   describe 'DELETE /blobs/:id' do
     let(:headers) { { Authorization: basic_authorization, 'Content-Type': Constants::DEFAULT_CONTENT_TYPE, 'X-Request-Id': 'a-correlation-id' } }
+    let(:post_headers) { { Authorization: basic_authorization, 'Content-Type': 'application/json', 'X-Request-Id': 'a-correlation-id' } }
     let(:valid_json_params) do
       {
         filename: 'sample.csv',
