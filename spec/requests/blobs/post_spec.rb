@@ -8,8 +8,13 @@ RSpec.describe 'Blobs', type: :request do
   describe 'POST /blobs/create' do
     let(:headers) { { Authorization: basic_authorization, 'Content-Type': 'application/json', 'X-Request-Id': 'a-correlation-id' } }
 
-    # ---------------------------------------------------------
-    #  the file DOES NOT REQUIRE an adjustment
+    # ---------------------------------------------------------------------------
+    it 'must reject unauthorized POST calls' do
+      get '/blobs', as: :json
+
+      expect(response.status).to eq 401
+    end
+
     # ---------------------------------------------------------
     context 'when the file does not require adjustments' do
       let(:valid_json_params) do
@@ -21,6 +26,7 @@ RSpec.describe 'Blobs', type: :request do
         }
       end
 
+      # ---------------------------------------------------------
       it 'creates a file when passed JSON' do
         post '/blobs/create', headers:, params: valid_json_params, as: :json
 
@@ -28,6 +34,7 @@ RSpec.describe 'Blobs', type: :request do
         expect(response).to match_json_schema('blobs')
       end
 
+      # ---------------------------------------------------------
       it 'must store the original file' do
         post '/blobs/create', headers:, params: valid_json_params, as: :json
 
@@ -54,6 +61,7 @@ RSpec.describe 'Blobs', type: :request do
         }
       end
 
+      # ---------------------------------------------------------
       it 'returns an adjusted GCP file' do
         post '/blobs/create', headers:, params: valid_json_params_that_require_adjustment, as: :json
 
@@ -61,6 +69,7 @@ RSpec.describe 'Blobs', type: :request do
         expect(server_file.fetch('adjusted_file', '')).to eq(valid_json_params_that_require_adjustment[:adjusted_file])
       end
 
+      # ---------------------------------------------------------
       it 'creates a file when passed JSON' do
         post '/blobs/create', headers:, params: valid_json_params_that_require_adjustment, as: :json
 
@@ -68,6 +77,7 @@ RSpec.describe 'Blobs', type: :request do
         expect(response).to match_json_schema('blobs')
       end
 
+      # ---------------------------------------------------------
       it 'must store the adjusted file' do
         post '/blobs/create', headers:, params: valid_json_params_that_require_adjustment, as: :json
 
@@ -79,6 +89,7 @@ RSpec.describe 'Blobs', type: :request do
         expect(stored_file).to eq expected_file
       end
 
+      # ---------------------------------------------------------
       it 'must store the original file' do
         post '/blobs/create', headers:, params: valid_json_params_that_require_adjustment, as: :json
 

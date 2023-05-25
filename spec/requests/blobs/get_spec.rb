@@ -16,6 +16,14 @@ RSpec.describe 'Blobs', type: :request do
       }
     end
 
+    # ---------------------------------------------------------------------------
+    it 'must reject unauthorized GET calls' do
+      get '/blobs', as: :json
+
+      expect(response.status).to eq 401
+    end
+
+    # ---------------------------------------------------------------------------
     it 'must retrieve a file previously uploaded in the list' do
       post '/blobs/create', headers:, params: valid_json_params, as: :json
       parsed_json = JSON.parse(response.body)
@@ -29,6 +37,7 @@ RSpec.describe 'Blobs', type: :request do
       expect(is_the_file_uploaded).to be true
     end
 
+    # ---------------------------------------------------------------------------
     it 'must have an associated file type on each file' do
       post '/blobs/create', headers:, params: valid_json_params, as: :json
       parsed_json = JSON.parse(response.body)
