@@ -1,0 +1,5 @@
+module Constants
+  TARGET_DIRECTORY_ORIGINAL = 'received_files'
+  TARGET_DIRECTORY_GCP = "#{TARGET_DIRECTORY_ORIGINAL}/gcp"
+  DEFAULT_CONTENT_TYPE = 'text/csv'
+end

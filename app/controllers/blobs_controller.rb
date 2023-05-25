@@ -1,10 +1,15 @@
 # frozen_string_literal: true
 
+# This is the blobs controller :-)
 class BlobsController < ApplicationController
   before_action :parse_json!, only: [:create]
 
-  include ActionController::HttpAuthentication::Basic::ControllerMethods
-  http_basic_authenticate_with name: Rails.configuration.file_api.basic_auth_username, password: Rails.configuration.file_api.basic_auth_password
+  # GET /blobs
+  def index
+    json = BlobsSvc::Directory.list.as_json
+
+    render json:, status: :ok
+  end
 
   # POST /blobs/create
   def create

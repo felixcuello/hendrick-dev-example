@@ -1,8 +1,8 @@
+# frozen_string_literal: true
+
 require 'csv'
 require 'securerandom'
 
-TARGET_DIRECTORY_ORIGINAL = 'received_files'
-TARGET_DIRECTORY_GCP = 'received_files/gcp'
 MECHANICAL_BUSINESS_TRANSFORMATION = 'mechanincal business transoformation GCP'
 NEWLINE = "\r\n"
 
@@ -34,7 +34,7 @@ module BlobsSvc
     #  Stores the original CSV file
     # ---------------------------------------------------------
     def store_original_file(uuid:)
-      filename = "#{TARGET_DIRECTORY_ORIGINAL}/#{uuid}.json"
+      filename = "#{Constants::TARGET_DIRECTORY_ORIGINAL}/#{uuid}.json"
 
       @json['document_id'] = uuid
       @json['document_filename'] = filename
@@ -49,7 +49,7 @@ module BlobsSvc
     #  it processes it, and stores it in the gcp directory
     # ------------------------------------------------------
     def maybe_store_gcp_adjusted_file(uuid:)
-      filename = "#{TARGET_DIRECTORY_GCP}/#{uuid}.json"
+      filename = "#{Constants::TARGET_DIRECTORY_GCP}/#{uuid}.json"
 
       gcp_sum = 0
       adjusted = false

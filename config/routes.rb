@@ -4,5 +4,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
-  post "blobs/create", to: "blobs#create"
+  post 'blobs/create', to: 'blobs#create'
+
+  resources :blobs, only: %i[index show]
 end
