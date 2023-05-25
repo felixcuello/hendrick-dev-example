@@ -6,8 +6,10 @@ RSpec.describe 'Blobs', type: :request do
   include_context :with_basic_authorization
 
   describe 'DELETE /blobs/:id' do
-    let(:headers) { { Authorization: basic_authorization, 'Content-Type': Constants::DEFAULT_CONTENT_TYPE, 'X-Request-Id': 'a-correlation-id' } }
-    let(:post_headers) { { Authorization: basic_authorization, 'Content-Type': 'application/json', 'X-Request-Id': 'a-correlation-id' } }
+    let(:basic_header) { { Authorization: basic_authorization, 'X-Request-Id': 'a-correlation-id' } }
+    let(:delete_headers) { basic_header['Content-Type'] = Constants::DEFAULT_CONTENT_TYPE; basic_header }
+    let(:post_headers) { basic_header['Content-Type'] = 'application/json'; basic_header }
+
     let(:valid_json_params) do
       {
         filename: 'sample.csv',
@@ -17,15 +19,21 @@ RSpec.describe 'Blobs', type: :request do
       }
     end
 
+    # ---------------------------------------------------------------------------
+    it 'must reject unauthorized DELETE calls' do
+      delete '/blobs/123', as: :json
+
+      expect(response.status).to eq 401
+    end
+
+    # ---------------------------------------------------------------------------
     it 'must delete a file correctly' do
       post '/blobs/create', headers: post_headers, params: valid_json_params, as: :json
       parsed_json = JSON.parse(response.body)
       filename = File.basename(parsed_json.fetch('document_filename', ''))
       id = filename.to_s.downcase.chomp('.json')
 
-      uploaded_file = Base64.decode64(parsed_json.fetch('file', ''))
-
-      delete "/blobs/#{id}", headers: headers
+      delete "/blobs/#{id}", headers: delete_headers
 
       expect(response.status).to eq 200
     end

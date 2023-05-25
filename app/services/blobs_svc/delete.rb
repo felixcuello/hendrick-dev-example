@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module BlobsSvc
-  # This service manages the blobs directories
+  # This service deletes files given an id
   class Delete
     class << self
       def file(id:)

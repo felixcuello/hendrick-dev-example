@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 module BlobsSvc
-  # This service manages the blobs directories
+  # This service object create methods to manipulate the files in the
+  # directories
   class Directory
     class << self
       DIRECTORIES = [Constants::TARGET_DIRECTORY_ORIGINAL, Constants::TARGET_DIRECTORY_GCP].freeze

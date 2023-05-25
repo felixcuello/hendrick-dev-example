@@ -50,7 +50,7 @@ RSpec.describe 'Blobs', type: :request do
       get '/blobs', headers:, as: :json
 
       parsed_response = JSON.parse(response.body)
-      is_the_file_uploaded = parsed_response.any? { |e| Constants::DEFAULT_CONTENT_TYPE == e.fetch('content_type') }
+      is_the_file_uploaded = parsed_response.any? { |e| e.fetch('content_type') == Constants::DEFAULT_CONTENT_TYPE }
 
       expect(is_the_file_uploaded).to be true
 
@@ -61,8 +61,9 @@ RSpec.describe 'Blobs', type: :request do
   end
 
   describe 'GET /blobs/:id' do
-    let(:post_headers) { { Authorization: basic_authorization, 'Content-Type': 'application/json', 'X-Request-Id': 'a-correlation-id' } }
-    let(:get_headers) { { Authorization: basic_authorization, 'Content-Type': Constants::DEFAULT_CONTENT_TYPE, 'X-Request-Id': 'a-correlation-id' } }
+    let(:basic_header) { { Authorization: basic_authorization, 'X-Request-Id': 'a-correlation-id' } }
+    let(:post_headers) { basic_header['Content-Type'] = 'application/json'; basic_header }
+    let(:get_headers) { basic_header['Content-Type'] = Constants::DEFAULT_CONTENT_TYPE; basic_header }
     let(:valid_json_params) do
       {
         filename: 'sample.csv',
