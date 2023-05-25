@@ -35,6 +35,10 @@ RSpec.describe 'Blobs', type: :request do
       is_the_file_uploaded = parsed_response.any? { |e| /#{filename}/.match e.fetch('file_name', '') }
 
       expect(is_the_file_uploaded).to be true
+
+      # -- Remove uploaded file
+      id = File.basename(filename).chomp('.json')
+      delete "/blobs/#{id}", headers:
     end
 
     # ---------------------------------------------------------------------------
@@ -49,6 +53,10 @@ RSpec.describe 'Blobs', type: :request do
       is_the_file_uploaded = parsed_response.any? { |e| Constants::DEFAULT_CONTENT_TYPE == e.fetch('content_type') }
 
       expect(is_the_file_uploaded).to be true
+
+      # -- Remove uploaded file
+      id = File.basename(filename).chomp('.json')
+      delete "/blobs/#{id}", headers:
     end
   end
 
@@ -75,6 +83,10 @@ RSpec.describe 'Blobs', type: :request do
       get "/blobs/#{id}", headers: get_headers, as: :json
 
       expect(response.body).to eq(uploaded_file)
+
+      # -- Remove uploaded file
+      id = File.basename(filename).chomp('.json')
+      delete "/blobs/#{id}", headers:
     end
   end
 end

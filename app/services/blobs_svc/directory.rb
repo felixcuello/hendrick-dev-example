@@ -34,8 +34,6 @@ module BlobsSvc
         }
       end
 
-      private
-
       def file_path_by(id:)
         DIRECTORIES.each do |directory|
           Dir.entries(directory).each do |file|

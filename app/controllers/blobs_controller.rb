@@ -3,7 +3,7 @@
 # This is the blobs controller :-)
 class BlobsController < ApplicationController
   before_action :parse_json!, only: [:create]
-  before_action :get_file_id, only: [:show]
+  before_action :get_file_id, only: [:show, :destroy]
 
   # GET /blobs
   def index
@@ -25,6 +25,15 @@ class BlobsController < ApplicationController
 
     render json:, status: :created # http://www.railsstatuscodes.com/
   end
+
+  # DELETE /blobs/:id
+  def destroy
+    deleted = BlobsSvc::Delete.file(id: @id)
+
+    render status: (deleted ? :ok : :not_found)
+  end
+
+  private
 
   # Parses the JSON and generates an exception if it fails
   def parse_json!
